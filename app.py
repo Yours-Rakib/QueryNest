@@ -121,3 +121,33 @@ def chatbot():
     conn.close()
     return render_template('chatbot.html', suggestions=top_faqs, history=history)
 
+@app.route('/chatbot/ask', methods=['POST'])
+@login_required
+def chatbot_ask():
+    data    = request.get_json()
+    message = (data.get('message') or '').strip()
+    if not message:
+        return jsonify({'answer': 'Please type a question first.', 'matched': False})
+
+    result    = chatbot_response(message)
+    timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    conn = get_db()
+    cur  = conn.cursor()
+    cur.execute(
+        "INSERT INTO chat_history (user_id, message, response, matched_faq, category, timestamp) VALUES (?,?,?,?,?,?)",
+        (session['user_id'], message, result['answer'], result.get('question'), result.get('category'), timestamp)
+    )
+    chat_id = cur.lastrowid
+
+    # Feature #2: auto-flag unmatched
+    if not result['matched']:
+        conn.execute(
+            "INSERT INTO unmatched_queries (user_id, query_text, timestamp) VALUES (?,?,?)",
+            (session['user_id'], message, timestamp)
+        )
+
+    conn.commit(); conn.close()
+    result['chat_id']   = chat_id
+    result['timestamp'] = timestamp
+    return jsonify(result)
