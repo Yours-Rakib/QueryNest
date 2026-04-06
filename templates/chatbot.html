@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+{% block title %}Chatbot{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+  <!-- Chat Column -->
+  <div class="col-lg-8">
+    <div class="text-center mb-3">
+      <div class="fs-1" style="color:var(--primary);"><i class="bi bi-robot"></i></div>
+      <h2 class="fw-bold">QueryNest Chatbot</h2>
+      <p class="text-muted">Ask any SWE academic question below</p>
+    </div>
+
+    <!-- Chat Window -->
+    <div class="card mb-3">
+      <div class="card-body p-0">
+        <div id="chat-box"
+             style="height:420px; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:12px;">
+          <div class="d-flex gap-2 align-items-start">
+            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                 style="width:36px;height:36px;background:var(--primary);color:#fff;font-size:1rem;">
+              <i class="bi bi-robot"></i>
+            </div>
+            <div class="p-3 rounded-3" style="background:#e9f0fb; max-width:85%;">
+              <p class="mb-0">Hello, <strong>{{ session.user_name }}</strong>! 👋<br>
+              I am the QueryNest chatbot. Ask me anything about SWE courses, grading, exams, or lab schedules.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer p-3" style="border-top:1px solid #eee;">
+        <div class="input-group">
+          <input type="text" id="user-input" class="form-control"
+                 placeholder="Type your question here..." autocomplete="off" />
+          <button class="btn btn-primary px-4" id="send-btn" onclick="sendMessage()">
+            <i class="bi bi-send-fill"></i> Send
+          </button>
+        </div>
+        <small class="text-muted mt-1 d-block">Press <kbd>Enter</kbd> to send</small>
+      </div>
+    </div>
+
+    <!-- Suggested Questions (Feature #3) -->
+    {% if suggestions %}
+    <div class="card mb-3">
+      <div class="card-header py-2" style="background:var(--primary);color:#fff;">
+        <small><i class="bi bi-lightbulb-fill me-1"></i><strong>Top Suggested Questions — click to ask</strong></small>
+      </div>
+      <div class="card-body p-3 d-flex flex-wrap gap-2">
+        {% for s in suggestions %}
+        <button class="btn btn-outline-secondary btn-sm" onclick="askSuggestion(this.innerText)">
+          {{ s.question }}
+        </button>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- History Column (Feature #4) -->
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header py-3" style="background:var(--primary);color:#fff;">
+        <span class="fw-bold"><i class="bi bi-clock-history me-2"></i>My Chat History</span>
+      </div>
+      <div class="card-body p-0" style="max-height:540px;overflow-y:auto;">
+        {% if history %}
+          {% for h in history %}
+          <div class="px-3 py-2 border-bottom">
+            <div class="small fw-semibold text-truncate" title="{{ h.message }}">
+              <i class="bi bi-person-fill text-warning me-1"></i>{{ h.message[:60] }}{% if h.message|length > 60 %}…{% endif %}
+            </div>
+            <div class="small text-muted text-truncate">
+              <i class="bi bi-robot text-primary me-1"></i>{{ h.response[:60] }}{% if h.response|length > 60 %}…{% endif %}
+            </div>
+            <div class="d-flex justify-content-between mt-1">
+              <small class="text-muted" style="font-size:.72rem;"><i class="bi bi-calendar3 me-1"></i>{{ h.timestamp }}</small>
+              {% if h.rating == 'helpful' %}
+                <span class="badge bg-success" style="font-size:.7rem;"><i class="bi bi-hand-thumbs-up"></i> Helpful</span>
+              {% elif h.rating == 'not_helpful' %}
+                <span class="badge bg-danger" style="font-size:.7rem;"><i class="bi bi-hand-thumbs-down"></i> Not Helpful</span>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="text-center text-muted py-4">
+            <i class="bi bi-chat-dots fs-3"></i>
+            <p class="mt-2 small">No chat history yet.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const chatBox   = document.getElementById('chat-box');
+  const userInput = document.getElementById('user-input');
+
+  userInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendMessage();
+  });
+
+  function askSuggestion(question) {
+    userInput.value = question;
+    sendMessage();
+  }
+
+  function addBubble(text, sender, chatId) {
+    const isBot = sender === 'bot';
+    const wrap  = document.createElement('div');
+    wrap.className = 'd-flex gap-2 align-items-start' + (isBot ? '' : ' flex-row-reverse');
+
+    const avatar = document.createElement('div');
+    avatar.className = 'rounded-circle d-flex align-items-center justify-content-center flex-shrink-0';
+    avatar.style = 'width:36px;height:36px;font-size:1rem;';
+    if (isBot) {
+      avatar.style.background = '#1a3c6e'; avatar.style.color = '#fff';
+      avatar.innerHTML = '<i class="bi bi-robot"></i>';
+    } else {
+      avatar.style.background = '#f0a500'; avatar.style.color = '#fff';
+      avatar.innerHTML = '<i class="bi bi-person-fill"></i>';
+    }
+
+    const bubble = document.createElement('div');
+    bubble.className = 'p-3 rounded-3';
+    bubble.style     = 'max-width:85%;white-space:pre-wrap;';
+    bubble.style.background = isBot ? '#e9f0fb' : '#fff3cd';
+    bubble.style.border     = isBot ? 'none' : '1px solid #f0a500';
+    bubble.innerHTML = text;
+
+    // Rating buttons (Feature #5) — only on bot messages
+    if (isBot && chatId) {
+      const rateDiv = document.createElement('div');
+      rateDiv.className = 'd-flex gap-2 mt-2';
+      rateDiv.id = `rate-${chatId}`;
+      rateDiv.innerHTML = `
+        <small class="text-muted me-1">Was this helpful?</small>
+        <button class="btn btn-outline-success btn-sm py-0 px-2" onclick="rateResponse(${chatId},'helpful',this)">
+          <i class="bi bi-hand-thumbs-up"></i> Yes
+        </button>
+        <button class="btn btn-outline-danger btn-sm py-0 px-2" onclick="rateResponse(${chatId},'not_helpful',this)">
+          <i class="bi bi-hand-thumbs-down"></i> No
+        </button>`;
+      bubble.appendChild(rateDiv);
+    }
+
+    wrap.appendChild(avatar);
+    wrap.appendChild(bubble);
+    chatBox.appendChild(wrap);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  async function rateResponse(chatId, rating, btn) {
+    const div = document.getElementById(`rate-${chatId}`);
+    await fetch('/chatbot/rate', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({chat_id: chatId, rating: rating})
+    });
+    div.innerHTML = rating === 'helpful'
+      ? '<span class="badge bg-success"><i class="bi bi-hand-thumbs-up"></i> Marked Helpful</span>'
+      : '<span class="badge bg-danger"><i class="bi bi-hand-thumbs-down"></i> Marked Not Helpful</span>';
+  }
+
+  function addTyping() {
+    const wrap = document.createElement('div');
+    wrap.id    = 'typing';
+    wrap.className = 'd-flex gap-2 align-items-start';
+    wrap.innerHTML = `
+      <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+           style="width:36px;height:36px;background:#1a3c6e;color:#fff;font-size:1rem;">
+        <i class="bi bi-robot"></i>
+      </div>
+      <div class="p-3 rounded-3" style="background:#e9f0fb;">
+        <span class="text-muted fst-italic">Searching FAQs...</span>
+      </div>`;
+    chatBox.appendChild(wrap);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('typing');
+    if (t) t.remove();
+  }
+
+  async function sendMessage() {
+    const msg = userInput.value.trim();
+    if (!msg) return;
+    addBubble(msg, 'user', null);
+    userInput.value = '';
+    addTyping();
+
+    try {
+      const res  = await fetch('/chatbot/ask', {
+        method:  'POST',
+        headers: {'Content-Type':'application/json'},
+        body:    JSON.stringify({message: msg})
+      });
+      const data = await res.json();
+      removeTyping();
+
+      let html = data.answer;
+      if (data.matched && data.category) {
+        const confColor = data.confidence === 'High' ? 'bg-success' : 'bg-warning text-dark';
+        html += `\n\n<span class="badge me-1" style="background:var(--primary);">
+                   <i class="bi bi-tag-fill me-1"></i>${data.category}</span>
+                 <span class="badge ${confColor}">
+                   <i class="bi bi-graph-up me-1"></i>${data.confidence} Confidence</span>`;
+      }
+      if (!data.matched) {
+        html += `\n\n<small class="text-muted">
+                   💡 Try <a href="/faqs">Browse FAQs</a> or <a href="/academic">Academic Info</a>.</small>`;
+      }
+      addBubble(html, 'bot', data.chat_id);
+    } catch (err) {
+      removeTyping();
+      addBubble('Something went wrong. Please try again.', 'bot', null);
+    }
+  }
+</script>
+{% endblock %}
