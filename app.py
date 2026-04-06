@@ -151,3 +151,45 @@ def chatbot_ask():
     result['chat_id']   = chat_id
     result['timestamp'] = timestamp
     return jsonify(result)
+
+def chatbot_response(user_message):
+    clean = re.sub(r'[^\w\s]', '', user_message.lower())
+    words = set(clean.split())
+    stop_words = {'what','is','the','how','when','where','who','are','a','an','do','does','can','i','my','for','to','of','in','it','be','get','was','will'}
+    words -= stop_words
+
+    conn = get_db()
+    faqs = conn.execute("SELECT * FROM faqs").fetchall()
+    conn.close()
+
+    best_faq   = None
+    best_score = 0
+
+    for faq in faqs:
+        kw_words  = set((faq['keywords'] or '').lower().split())
+        q_words   = set(re.sub(r'[^\w\s]', '', faq['question'].lower()).split()) - stop_words
+        faq_words = kw_words | q_words
+        score = len(words & faq_words)
+        if score > best_score:
+            best_score = score
+            best_faq   = faq
+
+    confidence = 'High' if best_score >= 2 else 'Low'
+
+    if best_faq and best_score >= 1:
+        return {
+            'answer':     best_faq['answer'],
+            'question':   best_faq['question'],
+            'category':   best_faq['category'],
+            'faq_id':     best_faq['faq_id'],
+            'confidence': confidence,
+            'matched':    True
+        }
+    return {
+        'answer':     "Sorry, I couldn't find an answer to that. Try rephrasing your question, or browse the Academic Info page.",
+        'question':   None,
+        'category':   None,
+        'faq_id':     None,
+        'confidence': None,
+        'matched':    False
+    }
