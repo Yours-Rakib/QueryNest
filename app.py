@@ -209,3 +209,16 @@ def chatbot():
     ).fetchall()
     conn.close()
     return render_template('chatbot.html', suggestions=top_faqs, history=history)
+
+@app.route('/resources')
+@login_required
+def resources():
+    topic = request.args.get('topic', '')
+    conn  = get_db()
+    if topic:
+        items = conn.execute("SELECT * FROM resources WHERE topic=? ORDER BY resource_type", (topic,)).fetchall()
+    else:
+        items = conn.execute("SELECT * FROM resources ORDER BY topic, resource_type").fetchall()
+    topics = conn.execute("SELECT DISTINCT topic FROM resources ORDER BY topic").fetchall()
+    conn.close()
+    return render_template('resources.html', resources=items, topics=topics, current_topic=topic)
