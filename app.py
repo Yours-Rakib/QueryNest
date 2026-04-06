@@ -235,3 +235,35 @@ def trending():
     conn.close()
     return render_template('trending.html', trending=trending)
 
+@app.route('/admin')
+@admin_required
+def admin_dashboard():
+    conn = get_db()
+    total_faqs       = conn.execute("SELECT COUNT(*) FROM faqs").fetchone()[0]
+    total_queries    = conn.execute("SELECT COUNT(*) FROM chat_history").fetchone()[0]
+    unmatched_count  = conn.execute("SELECT COUNT(*) FROM unmatched_queries WHERE converted=0").fetchone()[0]
+    pending_feedback = conn.execute("SELECT COUNT(*) FROM feedback WHERE status='Pending'").fetchone()[0]
+    total_users      = conn.execute("SELECT COUNT(*) FROM users WHERE role='student'").fetchone()[0]
+
+    top_questions = conn.execute('''
+        SELECT matched_faq, COUNT(*) as cnt FROM chat_history
+        WHERE matched_faq IS NOT NULL
+        GROUP BY matched_faq ORDER BY cnt DESC LIMIT 5
+    ''').fetchall()
+
+    avg_ratings = conn.execute('''
+        SELECT f.question,
+               SUM(CASE WHEN ch.rating='helpful' THEN 1 ELSE 0 END) as helpful,
+               SUM(CASE WHEN ch.rating='not_helpful' THEN 1 ELSE 0 END) as not_helpful
+        FROM faqs f LEFT JOIN chat_history ch ON ch.matched_faq = f.question
+        WHERE ch.rating IS NOT NULL
+        GROUP BY f.faq_id ORDER BY helpful DESC LIMIT 5
+    ''').fetchall()
+
+    conn.close()
+    return render_template('admin_dashboard.html',
+                           total_faqs=total_faqs, total_queries=total_queries,
+                           unmatched_count=unmatched_count, pending_feedback=pending_feedback,
+                           total_users=total_users, top_questions=top_questions,
+                           avg_ratings=avg_ratings)
+
