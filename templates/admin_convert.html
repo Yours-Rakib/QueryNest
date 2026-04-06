@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Convert Query to FAQ{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="page-header">
+      <h3 class="fw-bold mb-1"><i class="bi bi-arrow-right-circle-fill me-2"></i>Convert Query to FAQ</h3>
+      <p class="mb-0 opacity-75">Fill in the answer and save this as a new FAQ entry</p>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header py-3" style="background:#dc3545;color:#fff;">
+        <span class="fw-bold"><i class="bi bi-chat-quote me-2"></i>Original Student Query</span>
+      </div>
+      <div class="card-body">
+        <p class="fw-semibold mb-1">{{ query.query_text }}</p>
+        <small class="text-muted"><i class="bi bi-calendar3 me-1"></i>{{ query.timestamp }}</small>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header py-3" style="background:#1a3c6e;color:#fff;">
+        <span class="fw-bold"><i class="bi bi-plus-circle me-2"></i>Create New FAQ</span>
+      </div>
+      <div class="card-body p-4">
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Question</label>
+            <input type="text" name="question" class="form-control"
+                   value="{{ query.query_text }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Answer</label>
+            <textarea name="answer" class="form-control" rows="5"
+                      placeholder="Write the official answer here…" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Keywords <small class="text-muted fw-normal">(space-separated)</small></label>
+            <input type="text" name="keywords" class="form-control" placeholder="e.g. grade exam credit hour">
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Category</label>
+            <select name="category" class="form-select" required>
+              <option value="Academic">Academic</option>
+              <option value="Exam">Exam</option>
+              <option value="Lab">Lab</option>
+              <option value="General">General</option>
+            </select>
+          </div>
+          <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-warning fw-semibold px-4">
+              <i class="bi bi-check-lg me-2"></i>Save as FAQ
+            </button>
+            <a href="{{ url_for('admin_unmatched') }}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
