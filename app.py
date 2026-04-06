@@ -267,3 +267,32 @@ def admin_dashboard():
                            total_users=total_users, top_questions=top_questions,
                            avg_ratings=avg_ratings)
 
+@app.route('/admin/unmatched')
+@admin_required
+def admin_unmatched():
+    conn = get_db()
+    queries = conn.execute('''
+        SELECT uq.*, u.name as student_name
+        FROM unmatched_queries uq LEFT JOIN users u ON uq.user_id = u.user_id
+        WHERE uq.converted=0 ORDER BY uq.timestamp DESC
+    ''').fetchall()
+    conn.close()
+    return render_template('admin_unmatched.html', queries=queries)
+
+@app.route('/admin/unmatched/convert/<int:query_id>', methods=['GET', 'POST'])
+@admin_required
+def admin_convert_query(query_id):
+    conn  = get_db()
+    query = conn.execute("SELECT * FROM unmatched_queries WHERE query_id=?", (query_id,)).fetchone()
+    if request.method == 'POST':
+        conn.execute(
+            "INSERT INTO faqs (question, answer, keywords, category) VALUES (?,?,?,?)",
+            (request.form['question'], request.form['answer'],
+             request.form['keywords'], request.form['category'])
+        )
+        conn.execute("UPDATE unmatched_queries SET converted=1 WHERE query_id=?", (query_id,))
+        conn.commit(); conn.close()
+        flash('Query converted to FAQ!', 'success')
+        return redirect(url_for('admin_unmatched'))
+    conn.close()
+    return render_template('admin_convert.html', query=query)
