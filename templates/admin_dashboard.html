@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="fw-bold" style="color:#1a3c6e;">
+    <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
+  </h2>
+  <span class="text-muted small"><i class="bi bi-person-circle me-1"></i>Logged in as <strong>{{ session.user_name }}</strong></span>
+</div>
+
+<!-- Feature #15: Analytics Stats Row -->
+<div class="row g-3 mb-4">
+  <div class="col-md-2 col-sm-4">
+    <div class="card text-white h-100" style="background:#1a3c6e;">
+      <div class="card-body text-center py-3">
+        <i class="bi bi-question-circle-fill fs-2 mb-1"></i>
+        <div class="fs-3 fw-bold">{{ total_faqs }}</div>
+        <div class="small">Total FAQs</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-4">
+    <div class="card text-white h-100" style="background:#f0a500;">
+      <div class="card-body text-center py-3">
+        <i class="bi bi-chat-dots-fill fs-2 mb-1"></i>
+        <div class="fs-3 fw-bold">{{ total_queries }}</div>
+        <div class="small">Total Queries</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-4">
+    <div class="card text-white h-100" style="background:#dc3545;">
+      <div class="card-body text-center py-3">
+        <i class="bi bi-exclamation-triangle-fill fs-2 mb-1"></i>
+        <div class="fs-3 fw-bold">{{ unmatched_count }}</div>
+        <div class="small">Unmatched</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-4">
+    <div class="card text-white h-100" style="background:#0dcaf0;">
+      <div class="card-body text-center py-3">
+        <i class="bi bi-envelope-fill fs-2 mb-1"></i>
+        <div class="fs-3 fw-bold">{{ pending_feedback }}</div>
+        <div class="small">Pending Feedback</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-4">
+    <div class="card text-white h-100" style="background:#198754;">
+      <div class="card-body text-center py-3">
+        <i class="bi bi-people-fill fs-2 mb-1"></i>
+        <div class="fs-3 fw-bold">{{ total_users }}</div>
+        <div class="small">Students</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-4">
+    <div class="card text-white h-100" style="background:#6f42c1;">
+      <div class="card-body text-center py-3">
+        <i class="bi bi-check-circle-fill fs-2 mb-1"></i>
+        <div class="fs-3 fw-bold">21</div>
+        <div class="small">Features Live</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <!-- Top Asked Questions -->
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header py-3" style="background:#1a3c6e;color:#fff;">
+        <span class="fw-bold"><i class="bi bi-fire me-2"></i>Most Asked Questions</span>
+      </div>
+      <div class="card-body p-0">
+        {% if top_questions %}
+        <ul class="list-group list-group-flush">
+          {% for q in top_questions %}
+          <li class="list-group-item d-flex justify-content-between align-items-center px-4">
+            <span class="small">{{ q.matched_faq[:70] }}{% if q.matched_faq|length > 70 %}…{% endif %}</span>
+            <span class="badge rounded-pill" style="background:var(--accent);">{{ q.cnt }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="text-center text-muted py-4"><i class="bi bi-inbox fs-3"></i><p class="mt-2">No queries yet.</p></div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <!-- FAQ Ratings -->
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header py-3" style="background:#1a3c6e;color:#fff;">
+        <span class="fw-bold"><i class="bi bi-star me-2"></i>FAQ Rating Summary</span>
+      </div>
+      <div class="card-body p-0">
+        {% if avg_ratings %}
+        <ul class="list-group list-group-flush">
+          {% for r in avg_ratings %}
+          <li class="list-group-item px-4">
+            <div class="small fw-semibold">{{ r.question[:60] }}…</div>
+            <div class="d-flex gap-2 mt-1">
+              <span class="badge bg-success"><i class="bi bi-hand-thumbs-up"></i> {{ r.helpful }}</span>
+              <span class="badge bg-danger"><i class="bi bi-hand-thumbs-down"></i> {{ r.not_helpful }}</span>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="text-center text-muted py-4"><i class="bi bi-inbox fs-3"></i><p class="mt-2">No ratings yet.</p></div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Action Links -->
+<div class="row g-3">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header py-3" style="background:#1a3c6e;color:#fff;">
+        <span class="fw-bold"><i class="bi bi-grid me-2"></i>Quick Admin Actions</span>
+      </div>
+      <div class="card-body p-4">
+        <div class="row g-3">
+          <div class="col-md-3 col-sm-6">
+            <a href="{{ url_for('admin_faqs') }}" class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center gap-2">
+              <i class="bi bi-question-circle fs-3"></i>
+              <span class="fw-semibold">Manage FAQs</span>
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <a href="{{ url_for('admin_unmatched') }}" class="btn btn-outline-danger w-100 py-3 d-flex flex-column align-items-center gap-2">
+              <i class="bi bi-exclamation-circle fs-3"></i>
+              <span class="fw-semibold">Unmatched Queries
+                {% if unmatched_count > 0 %}<span class="badge bg-danger ms-1">{{ unmatched_count }}</span>{% endif %}
+              </span>
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <a href="{{ url_for('admin_chatlogs') }}" class="btn btn-outline-info w-100 py-3 d-flex flex-column align-items-center gap-2">
+              <i class="bi bi-chat-dots fs-3"></i>
+              <span class="fw-semibold">Chat Logs</span>
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <a href="{{ url_for('admin_feedback') }}" class="btn btn-outline-warning w-100 py-3 d-flex flex-column align-items-center gap-2">
+              <i class="bi bi-envelope fs-3"></i>
+              <span class="fw-semibold">Feedback
+                {% if pending_feedback > 0 %}<span class="badge bg-warning text-dark ms-1">{{ pending_feedback }}</span>{% endif %}
+              </span>
+            </a>
+          </div>
+          <div class="col-12">
+            <div class="row g-3 justify-content-center">
+              <div class="col-md-3 col-sm-6">
+                <a href="{{ url_for('admin_materials') }}" class="btn btn-outline-success w-100 py-3 d-flex flex-column align-items-center gap-2">
+                  <i class="bi bi-upload fs-3"></i>
+                  <span class="fw-semibold">Study Materials</span>
+                </a>
+              </div>
+              <div class="col-md-3 col-sm-6">
+                <a href="{{ url_for('admin_notices') }}" class="btn btn-primary w-100 py-3 d-flex flex-column align-items-center gap-2">
+                  <i class="bi bi-megaphone-fill fs-3"></i>
+                  <span class="fw-semibold">Manage Notices</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
