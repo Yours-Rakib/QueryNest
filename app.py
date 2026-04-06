@@ -193,3 +193,19 @@ def chatbot_response(user_message):
         'confidence': None,
         'matched':    False
     }
+@app.route('/chatbot')
+@login_required
+def chatbot():
+    conn = get_db()
+    # Feature #3: Top 6 FAQ chips
+    top_faqs = conn.execute('''
+        SELECT f.question, f.category, COUNT(ch.chat_id) as cnt
+        FROM faqs f LEFT JOIN chat_history ch ON ch.matched_faq = f.question
+        GROUP BY f.faq_id ORDER BY cnt DESC LIMIT 6
+    ''').fetchall()
+    history = conn.execute(
+        'SELECT * FROM chat_history WHERE user_id=? ORDER BY timestamp DESC LIMIT 50',
+        (session['user_id'],)
+    ).fetchall()
+    conn.close()
+    return render_template('chatbot.html', suggestions=top_faqs, history=history)
