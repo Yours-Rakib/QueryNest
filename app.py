@@ -222,3 +222,16 @@ def resources():
     topics = conn.execute("SELECT DISTINCT topic FROM resources ORDER BY topic").fetchall()
     conn.close()
     return render_template('resources.html', resources=items, topics=topics, current_topic=topic)
+
+@app.route('/trending')
+@login_required
+def trending():
+    conn = get_db()
+    trending = conn.execute('''
+        SELECT matched_faq as question, category, COUNT(*) as count
+        FROM chat_history WHERE matched_faq IS NOT NULL
+        GROUP BY matched_faq ORDER BY count DESC LIMIT 20
+    ''').fetchall()
+    conn.close()
+    return render_template('trending.html', trending=trending)
+
