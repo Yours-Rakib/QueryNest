@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}{{ action }} Scholarship{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="page-header">
+      <h3 class="fw-bold mb-1"><i class="bi bi-award-fill me-2"></i>{{ action }} Scholarship</h3>
+    </div>
+    <div class="card">
+      <div class="card-body p-4">
+        <form method="post">
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Scholarship Name</label>
+            <input type="text" name="title" class="form-control"
+                   value="{{ scholarship.title if scholarship else '' }}"
+                   placeholder="e.g. DIU Merit Scholarship" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Description</label>
+            <textarea name="description" class="form-control" rows="4"
+                      placeholder="Details about eligibility, amount, criteria…">{{ scholarship.description if scholarship else '' }}</textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold"><i class="bi bi-calendar3 me-1"></i>Deadline <small class="text-muted fw-normal">(optional)</small></label>
+            <input type="date" name="deadline" class="form-control"
+                   value="{{ scholarship.deadline if scholarship else '' }}">
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold"><i class="bi bi-link-45deg me-1"></i>More Info Link <small class="text-muted fw-normal">(optional)</small></label>
+            <input type="url" name="link" class="form-control"
+                   value="{{ scholarship.link if scholarship else '' }}"
+                   placeholder="https://diu.edu.bd/scholarship">
+          </div>
+
+          <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-primary fw-semibold px-4">
+              <i class="bi bi-check-lg me-2"></i>{{ action }} Scholarship
+            </button>
+            <a href="{{ url_for('admin_campus') }}#tab-scholarships" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

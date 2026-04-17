@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<div class="rounded-4 p-5 mb-4 text-white text-center"
+     style="background: linear-gradient(135deg, #1a3c6e 0%, #2563ab 100%);">
+  <h1 class="fw-bold display-5"><i class="bi bi-chat-dots-fill me-2"></i>Welcome to QueryNest</h1>
+  <p class="lead mt-2 mb-4">Your AI-powered FAQ assistant for SWE Department queries</p>
+  {% if not session.get('user_id') %}
+  <a href="{{ url_for('login') }}" class="btn btn-lg px-5 fw-semibold"
+     style="background:#f0a500; color:#fff; border:none;">
+    <i class="bi bi-box-arrow-in-right me-1"></i> Login to Get Started
+  </a>
+  {% else %}
+  <a href="{{ url_for('chatbot') }}" class="btn btn-lg px-5 fw-semibold"
+     style="background:#f0a500; color:#fff; border:none;">
+    <i class="bi bi-robot me-1"></i> Ask Chatbot
+  </a>
+  {% endif %}
+</div>
+
+{% set logged_in = session.get('user_id') %}
+
+<!-- Row 1: 4 cards -->
+<div class="row g-3 mb-3">
+  <div class="col-md-6 col-lg-4">
+    <a href="{{ url_for('chatbot') if logged_in else url_for('login') }}" class="text-decoration-none">
+      <div class="card h-100 text-center p-3 feature-card">
+        <div class="card-body d-flex flex-column align-items-center">
+          <div class="feature-icon mb-3" style="background:#1a3c6e18;color:#1a3c6e;"><i class="bi bi-robot fs-3"></i></div>
+          <h6 class="fw-bold text-dark mb-2">Smart Chatbot</h6>
+          <p class="text-muted small mb-3">Ask any SWE question and get instant keyword-matched answers with confidence scoring.</p>
+          <span class="btn btn-sm btn-primary mt-auto">Open Chatbot</span>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-md-6 col-lg-4">
+    <a href="{{ url_for('notices') if logged_in else url_for('login') }}" class="text-decoration-none">
+      <div class="card h-100 text-center p-3 feature-card">
+        <div class="card-body d-flex flex-column align-items-center">
+          <div class="feature-icon mb-3" style="background:#f0a50018;color:#f0a500;"><i class="bi bi-bell-fill fs-3"></i></div>
+          <h6 class="fw-bold text-dark mb-2">Live Notices</h6>
+          <p class="text-muted small mb-3">Stay updated with the latest department announcements, deadlines, and schedules.</p>
+          <span class="btn btn-sm btn-primary mt-auto">View Notices</span>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-md-6 col-lg-4">
+    <a href="{{ url_for('feedback') if logged_in else url_for('login') }}" class="text-decoration-none">
+      <div class="card h-100 text-center p-3 feature-card">
+        <div class="card-body d-flex flex-column align-items-center">
+          <div class="feature-icon mb-3" style="background:#19875418;color:#198754;"><i class="bi bi-chat-left-text fs-3"></i></div>
+          <h6 class="fw-bold text-dark mb-2">Feedback &amp; Suggestions</h6>
+          <p class="text-muted small mb-3">Submit suggestions or report missing topics directly to the admin team.</p>
+          <span class="btn btn-sm btn-primary mt-auto">Give Feedback</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- Row 2: 4 cards -->
+<div class="row g-3 mb-3">
+  <div class="col-md-6 col-lg-3">
+    <a href="{{ url_for('resources') if logged_in else url_for('login') }}" class="text-decoration-none">
+      <div class="card h-100 text-center p-3 feature-card">
+        <div class="card-body d-flex flex-column align-items-center">
+          <div class="feature-icon mb-3" style="background:#1a3c6e18;color:#1a3c6e;"><i class="bi bi-book-fill fs-3"></i></div>
+          <h6 class="fw-bold text-dark mb-2">Resource Library</h6>
+          <p class="text-muted small mb-3">Curated books, YouTube channels, tutorials &amp; websites organized by SWE topics.</p>
+          <span class="btn btn-sm btn-primary mt-auto">Explore Resources</span>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-md-6 col-lg-3">
+    <a href="{{ url_for('career') if logged_in else url_for('login') }}" class="text-decoration-none">
+      <div class="card h-100 text-center p-3 feature-card">
+        <div class="card-body d-flex flex-column align-items-center">
+          <div class="feature-icon mb-3" style="background:#6f42c118;color:#6f42c1;"><i class="bi bi-signpost-split-fill fs-3"></i></div>
+          <h6 class="fw-bold text-dark mb-2">Career Roadmap</h6>
+          <p class="text-muted small mb-3">Structured guide with skills, tools &amp; technologies for Backend, Frontend, DevOps &amp; more.</p>
+          <span class="btn btn-sm btn-primary mt-auto">View Roadmap</span>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-md-6 col-lg-3">
+    <a href="{{ url_for('events') if logged_in else url_for('login') }}" class="text-decoration-none">
+      <div class="card h-100 text-center p-3 feature-card">
+        <div class="card-body d-flex flex-column align-items-center">
+          <div class="feature-icon mb-3" style="background:#dc354518;color:#dc3545;"><i class="bi bi-calendar-event-fill fs-3"></i></div>
+          <h6 class="fw-bold text-dark mb-2">Events &amp; Hackathons</h6>
+          <p class="text-muted small mb-3">Upcoming programming contests, hackathons, and tech events you can register for.</p>
+          <span class="btn btn-sm btn-primary mt-auto">View Events</span>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-md-6 col-lg-3">
+    <a href="{{ url_for('materials') if logged_in else url_for('login') }}" class="text-decoration-none">
+      <div class="card h-100 text-center p-3 feature-card">
+        <div class="card-body d-flex flex-column align-items-center">
+          <div class="feature-icon mb-3" style="background:#0dcaf018;color:#0aa2c0;"><i class="bi bi-download fs-3"></i></div>
+          <h6 class="fw-bold text-dark mb-2">Study Materials</h6>
+          <p class="text-muted small mb-3">Download admin-uploaded lecture notes, lab guides, past papers, and templates.</p>
+          <span class="btn btn-sm btn-primary mt-auto">Download Files</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- Row 3: 3 cards — full width aligned -->
+<div class="row g-3 mb-4">
+  <div class="col-md-6 col-lg-4">
+    <a href="{{ url_for('trending') if logged_in else url_for('login') }}" class="text-decoration-none">
+      <div class="card h-100 text-center p-3 feature-card">
+        <div class="card-body d-flex flex-column align-items-center">
+          <div class="feature-icon mb-3" style="background:#f0a50018;color:#f0a500;"><i class="bi bi-fire fs-3"></i></div>
+          <h6 class="fw-bold text-dark mb-2">Trending Questions</h6>
+          <p class="text-muted small mb-3">Real-time leaderboard of the most frequently asked chatbot questions across all students.</p>
+          <span class="btn btn-sm btn-primary mt-auto">See Trending</span>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-md-6 col-lg-4">
+    <a href="{{ url_for('academic') if logged_in else url_for('login') }}" class="text-decoration-none">
+      <div class="card h-100 text-center p-3 feature-card">
+        <div class="card-body d-flex flex-column align-items-center">
+          <div class="feature-icon mb-3" style="background:#2563ab18;color:#2563ab;"><i class="bi bi-book-half fs-3"></i></div>
+          <h6 class="fw-bold text-dark mb-2">Academic Info</h6>
+          <p class="text-muted small mb-3">Access course syllabus, grading policy, exam routine, and full lab schedules.</p>
+          <span class="btn btn-sm btn-primary mt-auto">View Academic</span>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-md-6 col-lg-4">
+    <a href="{{ url_for('campus') if logged_in else url_for('login') }}" class="text-decoration-none">
+      <div class="card h-100 text-center p-3 feature-card">
+        <div class="card-body d-flex flex-column align-items-center">
+          <div class="feature-icon mb-3" style="background:#19875418;color:#198754;"><i class="bi bi-building-fill fs-3"></i></div>
+          <h6 class="fw-bold text-dark mb-2">Campus Info Hub</h6>
+          <p class="text-muted small mb-3">Explore active student clubs, scholarship opportunities, and internship resources.</p>
+          <span class="btn btn-sm btn-primary mt-auto">Explore Campus</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- Latest Notices Preview -->
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center py-3"
+       style="background:#1a3c6e; color:#fff;">
+    <span class="fw-bold"><i class="bi bi-megaphone-fill me-2"></i>Latest Notices</span>
+    <a href="{{ url_for('notices') }}" class="btn btn-sm btn-light">View All</a>
+  </div>
+  <div class="card-body p-0">
+    {% if notices %}
+    <ul class="list-group list-group-flush">
+      {% for n in notices %}
+      <li class="list-group-item px-4 py-3">
+        <div class="d-flex justify-content-between align-items-start">
+          <span class="fw-semibold"><i class="bi bi-bell text-warning me-2"></i>{{ n.title }}</span>
+          <small class="text-muted text-nowrap ms-3"><i class="bi bi-calendar3 me-1"></i>{{ n.publish_date }}</small>
+        </div>
+        <small class="text-muted ms-4">{{ n.description[:130] }}{% if n.description|length > 130 %}…{% endif %}</small>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <div class="text-center text-muted py-4"><i class="bi bi-inbox fs-3"></i><p class="mt-2">No notices yet.</p></div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<style>
+  .feature-card { cursor:pointer; transition:transform .15s, box-shadow .15s; }
+  .feature-card:hover { transform:translateY(-5px); box-shadow:0 10px 28px rgba(0,0,0,.13) !important; }
+  .feature-icon { width:58px; height:58px; border-radius:14px; display:flex; align-items:center; justify-content:center; }
+</style>
+{% endblock %}

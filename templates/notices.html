@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}Notices{% endblock %}
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center">
+  <div>
+    <h3 class="fw-bold mb-1"><i class="bi bi-megaphone-fill me-2"></i>Notice Board</h3>
+    <p class="mb-0 opacity-75">Latest department announcements</p>
+  </div>
+</div>
+
+<!-- Search & Date Filter -->
+<div class="card mb-4">
+  <div class="card-body">
+    <form method="get" class="row g-3 align-items-end">
+      <div class="col-md-5 col-12">
+        <label class="form-label fw-semibold"><i class="bi bi-search me-1"></i>Search Notices</label>
+        <input type="text" name="search" class="form-control"
+               placeholder="Search by title or description…" value="{{ search }}">
+      </div>
+      <div class="col-md-2 col-6">
+        <label class="form-label fw-semibold"><i class="bi bi-calendar3 me-1"></i>From</label>
+        <input type="date" name="date_from" class="form-control" value="{{ date_from }}">
+      </div>
+      <div class="col-md-2 col-6">
+        <label class="form-label fw-semibold">To</label>
+        <input type="date" name="date_to" class="form-control" value="{{ date_to }}">
+      </div>
+      <div class="col-md-3 col-12 d-flex gap-2">
+        <button type="submit" class="btn btn-primary flex-fill">
+          <i class="bi bi-filter me-1"></i>Filter
+        </button>
+        <a href="{{ url_for('notices') }}" class="btn btn-outline-secondary">
+          <i class="bi bi-x-circle"></i>
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if notices %}
+<div class="row g-3">
+  {% for n in notices %}
+  <div class="col-12">
+    <!-- Clickable card -->
+    <div class="card notice-card"
+         data-bs-toggle="modal" data-bs-target="#noticeModal{{ n.notice_id }}"
+         style="cursor:pointer;transition:box-shadow .2s, transform .15s;"
+         onmouseover="this.style.boxShadow='0 6px 24px rgba(26,60,110,.15)';this.style.transform='translateY(-1px)'"
+         onmouseout="this.style.boxShadow='';this.style.transform=''">
+      <div class="card-body px-4 py-3">
+        <div class="d-flex justify-content-between align-items-start gap-2">
+          <h5 class="fw-bold mb-1 flex-grow-1" style="color:#1a3c6e;font-size:clamp(.95rem,2.5vw,1.1rem);">
+            <i class="bi bi-bell-fill me-2 text-warning"></i>{{ n.title }}
+          </h5>
+          <div class="d-flex align-items-center gap-2 flex-shrink-0">
+            {% if n.attachment %}
+            <span class="badge bg-info text-dark d-none d-sm-inline">
+              <i class="bi bi-paperclip me-1"></i>Attachment
+            </span>
+            {% endif %}
+            <small class="text-muted text-nowrap">
+              <i class="bi bi-calendar3 me-1"></i>{{ n.publish_date }}
+            </small>
+          </div>
+        </div>
+        <p class="text-muted mb-0 mt-2" style="font-size:.88rem;">
+          {{ n.description[:120] }}{% if n.description|length > 120 %}…{% endif %}
+        </p>
+        <div class="mt-2">
+          <small class="text-primary fw-semibold">
+            <i class="bi bi-eye me-1"></i>Click to read full notice
+            {% if n.attachment %} &nbsp;·&nbsp; <i class="bi bi-download me-1"></i>Download available{% endif %}
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Modal ──────────────────────────────────────── -->
+  <div class="modal fade" id="noticeModal{{ n.notice_id }}" tabindex="-1"
+       aria-labelledby="noticeLabel{{ n.notice_id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content" style="border-radius:14px;overflow:hidden;">
+
+        <!-- Header -->
+        <div class="modal-header" style="background:#1a3c6e;color:#fff;padding:1rem 1.5rem;">
+          <div>
+            <h5 class="modal-title fw-bold mb-0" id="noticeLabel{{ n.notice_id }}">
+              <i class="bi bi-bell-fill me-2 text-warning"></i>{{ n.title }}
+            </h5>
+            <small style="opacity:.75;font-size:.78rem;">
+              <i class="bi bi-calendar3 me-1"></i>Published: {{ n.publish_date }}
+            </small>
+          </div>
+          <button type="button" class="btn-close btn-close-white ms-3"
+                  data-bs-dismiss="modal"></button>
+        </div>
+
+        <!-- Body -->
+        <div class="modal-body p-4">
+          {% if n.attachment %}
+          {% set ext = n.attachment.rsplit('.', 1)[-1].lower() %}
+          {% if ext in ['jpg','jpeg','png'] %}
+          <div class="text-center mb-4">
+            <img src="{{ url_for('static', filename='uploads/' ~ n.attachment) }}"
+                 class="img-fluid rounded shadow-sm" style="max-height:380px;" alt="Notice attachment">
+          </div>
+          {% endif %}
+          {% endif %}
+
+          <p style="white-space:pre-wrap;line-height:1.8;font-size:.95rem;">{{ n.description }}</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer" style="background:#f8f9fa;">
+          {% if n.attachment %}
+          <a href="{{ url_for('notice_download', notice_id=n.notice_id) }}"
+             class="btn btn-success fw-semibold">
+            <i class="bi bi-download me-2"></i>Download Attachment
+          </a>
+          {% endif %}
+          <button type="button" class="btn btn-outline-secondary"
+                  data-bs-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<p class="text-muted mt-3 small">
+  Showing {{ notices|length }} notice(s). Click any notice to view full details.
+</p>
+
+{% else %}
+<div class="text-center text-muted py-5">
+  <i class="bi bi-inbox fs-1"></i>
+  <p class="mt-3">No notices found{% if search or date_from or date_to %} matching your filters{% endif %}.</p>
+  {% if search or date_from or date_to %}
+  <a href="{{ url_for('notices') }}" class="btn btn-outline-secondary btn-sm">Clear Filters</a>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

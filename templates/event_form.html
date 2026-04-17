@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block title %}{{ action }} Event{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="page-header">
+      <h3 class="fw-bold mb-1">
+        <i class="bi bi-calendar-event-fill me-2"></i>{{ action }} Event
+      </h3>
+      <p class="opacity-75 mb-0">Fill in the details to {{ action|lower }} an event or hackathon.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-body p-4">
+        <form method="post" id="eventForm">
+
+          <!-- Event Type -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-tag me-1"></i>Select Event Type
+            </label>
+
+            {% set type_colors = {'Contest':'#1a3c6e','Hackathon':'#f0a500','Tech Event':'#198754'} %}
+            {% set type_icons  = {'Contest':'bi-trophy','Hackathon':'bi-lightning-charge-fill','Tech Event':'bi-cpu'} %}
+            {% set type_descs  = {'Contest':'Programming/coding competition',
+                                   'Hackathon':'Build-a-thon / team sprint event',
+                                   'Tech Event':'Conference, workshop, or dev meetup'} %}
+
+            <div class="row g-2" id="typeCards">
+              {% for et in event_types %}
+              <div class="col-4">
+                <input type="radio" name="event_type" id="type_{{ loop.index }}"
+                       value="{{ et }}" class="d-none type-radio"
+                       {% if event and event.event_type == et %}checked{% elif not event and loop.first %}checked{% endif %}>
+                <label for="type_{{ loop.index }}"
+                       class="type-card card text-center p-3 h-100"
+                       style="cursor:pointer;border:2px solid #dee2e6;transition:all .15s;">
+                  <div class="fs-2 mb-1">
+                    <i class="bi {{ type_icons[et] }}"
+                       style="color:{{ type_colors[et] }};"></i>
+                  </div>
+                  <div class="fw-bold small" style="color:{{ type_colors[et] }};">{{ et }}</div>
+                  <div class="text-muted" style="font-size:0.7rem;line-height:1.3;">{{ type_descs[et] }}</div>
+                </label>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Event Name -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Event Name</label>
+            <input type="text" name="title" class="form-control"
+                   value="{{ event.title if event else '' }}"
+                   placeholder="e.g. Codeforces Round 1000" required>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              Description <small class="text-muted fw-normal">(optional)</small>
+            </label>
+            <textarea name="description" class="form-control" rows="3"
+                      placeholder="Short description of the event…">{{ event.description if event else '' }}</textarea>
+          </div>
+
+          <!-- Event Date -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold"><i class="bi bi-calendar3 me-1"></i>Event Date</label>
+            <input type="date" name="event_date" class="form-control"
+                   value="{{ event.event_date if event else '' }}" required>
+          </div>
+
+          <!-- Platform -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold"><i class="bi bi-globe me-1"></i>Platform</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="platform" id="platformOnline"
+                       value="Online" onchange="toggleLocation()"
+                       {% if not event or event.platform == 'Online' or not event.platform %}checked{% endif %}>
+                <label class="form-check-label fw-semibold" for="platformOnline">
+                  <i class="bi bi-globe me-1 text-info"></i>Online
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="platform" id="platformOffline"
+                       value="Offline" onchange="toggleLocation()"
+                       {% if event and event.platform == 'Offline' %}checked{% endif %}>
+                <label class="form-check-label fw-semibold" for="platformOffline">
+                  <i class="bi bi-geo-alt me-1 text-secondary"></i>Offline
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Location (Offline only) -->
+          <div class="mb-3" id="locationSection"
+               style="{% if not event or event.platform != 'Offline' %}display:none;{% endif %}">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-geo-alt-fill me-1"></i>Location
+              <small class="text-muted fw-normal">(for offline events)</small>
+            </label>
+            <input type="text" name="location" id="locationInput" class="form-control"
+                   value="{{ event.location if event and event.platform == 'Offline' else '' }}"
+                   placeholder="e.g. DIU Campus, Dhaka">
+          </div>
+
+          <!-- More Info Link -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-link-45deg me-1"></i>More Info / Register Link
+              <small class="text-muted fw-normal">(optional)</small>
+            </label>
+            <input type="url" name="link" class="form-control"
+                   value="{{ event.link if event else '' }}"
+                   placeholder="https://codeforces.com">
+          </div>
+
+          <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-primary fw-semibold px-4">
+              <i class="bi bi-check-lg me-2"></i>{{ action }} Event
+            </button>
+            <a href="{{ url_for('admin_events') }}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.type-radio:checked + .type-card {
+  border-color: currentColor !important;
+  box-shadow: 0 0 0 3px rgba(26,60,110,.15);
+  background: #f8f9ff;
+}
+.type-card:hover { background: #f8f9fa; }
+#type_1:checked + .type-card { border-color:#1a3c6e !important; box-shadow:0 0 0 3px rgba(26,60,110,.15); }
+#type_2:checked + .type-card { border-color:#f0a500 !important; box-shadow:0 0 0 3px rgba(240,165,0,.15); }
+#type_3:checked + .type-card { border-color:#198754 !important; box-shadow:0 0 0 3px rgba(25,135,84,.15); }
+</style>
+
+<script>
+function toggleLocation() {
+  const offline = document.getElementById('platformOffline').checked;
+  const section = document.getElementById('locationSection');
+  const input   = document.getElementById('locationInput');
+  section.style.display = offline ? '' : 'none';
+  input.required = offline;
+  if (!offline) input.value = '';
+}
+// Init on load
+toggleLocation();
+</script>
+{% endblock %}

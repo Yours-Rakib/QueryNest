@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}Campus Info Hub{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h3 class="fw-bold mb-1"><i class="bi bi-building-fill me-2"></i>Campus Info Hub</h3>
+  <p class="mb-0 opacity-75">Active clubs, internship resources, and scholarship opportunities</p>
+</div>
+
+<style>
+  #campusTabs .nav-link {
+    color: #1a3c6e !important; font-weight: 500;
+    border: 1px solid #dee2e6; margin-right: 4px;
+    background: #fff; border-radius: 6px 6px 0 0;
+  }
+  #campusTabs .nav-link:hover { color: #f0a500 !important; background: #f4f6fb; }
+  #campusTabs .nav-link.active {
+    color: #1a3c6e !important; font-weight: 700;
+    border-bottom-color: #fff; background: #fff;
+  }
+</style>
+
+<ul class="nav nav-tabs mb-0" id="campusTabs">
+  <li class="nav-item">
+    <a class="nav-link active" data-bs-toggle="tab" href="#clubs">
+      <i class="bi bi-people-fill me-1"></i><span class="d-none d-sm-inline">Student </span>Clubs
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#scholarships">
+      <i class="bi bi-award-fill me-1"></i>Scholarships
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#internships">
+      <i class="bi bi-briefcase-fill me-1"></i>Internships
+    </a>
+  </li>
+</ul>
+
+<div class="card mb-4" style="border-top:none;border-radius:0 6px 6px 6px;">
+  <div class="card-body pt-4">
+    <div class="tab-content">
+
+      <!-- ── Clubs ──────────────────────────────────── -->
+      <div class="tab-pane fade show active" id="clubs">
+        <div class="row g-3">
+          {% for club in clubs %}
+          <div class="col-md-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <div class="d-flex align-items-start gap-3">
+                  <!-- Logo or icon -->
+                  {% if club.logo %}
+                  <img src="{{ url_for('static', filename='uploads/' ~ club.logo) }}"
+                       style="width:52px;height:52px;object-fit:cover;border-radius:10px;
+                              border:1px solid #dee2e6;flex-shrink:0;" alt="{{ club.name }}">
+                  {% else %}
+                  <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                       style="width:52px;height:52px;background:#e9f0fb;color:#1a3c6e;font-size:1.3rem;">
+                    {% if club.category == 'Technical' %}<i class="bi bi-cpu-fill"></i>
+                    {% elif club.category == 'Cultural' %}<i class="bi bi-music-note-beamed"></i>
+                    {% elif club.category == 'Business' %}<i class="bi bi-briefcase-fill"></i>
+                    {% elif club.category == 'Sports' %}<i class="bi bi-trophy-fill"></i>
+                    {% else %}<i class="bi bi-people-fill"></i>{% endif %}
+                  </div>
+                  {% endif %}
+
+                  <div class="flex-grow-1 min-width-0">
+                    <h6 class="fw-bold mb-0">{{ club.name }}</h6>
+                    {% if club.motto %}
+                    <p class="text-primary fst-italic small mb-1" style="font-size:.78rem;">"{{ club.motto }}"</p>
+                    {% endif %}
+                    <p class="text-muted small mb-2" style="font-size:.82rem;">{{ club.description or '' }}</p>
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                      <span class="badge" style="background:#1a3c6e;font-size:.72rem;">{{ club.category or 'Club' }}</span>
+                      {% if club.contact %}
+                      <span class="small text-muted" style="font-size:.78rem;">
+                        <i class="bi bi-envelope me-1"></i>{{ club.contact }}
+                      </span>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% if club.link %}
+              <div class="card-footer bg-transparent pt-0 border-0 pb-3 px-3">
+                <a href="{{ club.link }}" target="_blank"
+                   class="btn btn-sm btn-outline-primary w-100">
+                  <i class="bi bi-box-arrow-up-right me-1"></i>Club Page
+                </a>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- ── Scholarships ───────────────────────────── -->
+      <div class="tab-pane fade" id="scholarships">
+        <div class="row g-3">
+          {% for s in scholarships %}
+          <div class="col-md-6">
+            <div class="card h-100" style="border-left:4px solid #f0a500;">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h6 class="fw-bold mb-0">{{ s.title }}</h6>
+                  {% if s.deadline %}
+                  <span class="badge bg-warning text-dark ms-2 text-nowrap flex-shrink-0">
+                    <i class="bi bi-clock me-1"></i>{{ s.deadline }}
+                  </span>
+                  {% endif %}
+                </div>
+                <p class="text-muted small mb-3">{{ s.description }}</p>
+                {% if s.link %}
+                <a href="{{ s.link }}" target="_blank" class="btn btn-sm btn-outline-warning">
+                  <i class="bi bi-box-arrow-up-right me-1"></i>More Info
+                </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- ── Internships ───────────────────────────── -->
+      <div class="tab-pane fade" id="internships">
+        <div class="row g-3">
+          {% for i in internships %}
+          <div class="col-md-6">
+            <div class="card h-100" style="border-left:4px solid #198754;">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                  <div>
+                    <h6 class="fw-bold mb-0">{{ i.title }}</h6>
+                    {% if i.company %}
+                    <div class="small text-primary fw-semibold">{{ i.company }}</div>
+                    {% endif %}
+                  </div>
+                  {% if i.deadline %}
+                  <span class="badge bg-success ms-2 text-nowrap flex-shrink-0">
+                    <i class="bi bi-clock me-1"></i>{{ i.deadline }}
+                  </span>
+                  {% endif %}
+                </div>
+                <p class="text-muted small mb-3 mt-2">{{ i.description }}</p>
+                {% if i.link %}
+                <a href="{{ i.link }}" target="_blank" class="btn btn-sm btn-outline-success">
+                  <i class="bi bi-box-arrow-up-right me-1"></i>More Info
+                </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

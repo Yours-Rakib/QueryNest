@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Browse FAQs{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h3 class="fw-bold mb-1"><i class="bi bi-question-circle-fill me-2"></i>Browse FAQs</h3>
+  <p class="mb-0 opacity-75">Explore all frequently asked questions by category</p>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <form method="get" class="row g-3 align-items-end">
+      <div class="col-md-5">
+        <label class="form-label fw-semibold"><i class="bi bi-search me-1"></i>Search</label>
+        <input type="text" name="search" class="form-control" placeholder="Search questions…" value="{{ search }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label fw-semibold"><i class="bi bi-tags me-1"></i>Category</label>
+        <select name="category" class="form-select">
+          <option value="">All Categories</option>
+          {% for c in categories %}
+          <option value="{{ c.category }}" {% if c.category == current_category %}selected{% endif %}>{{ c.category }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary flex-fill"><i class="bi bi-filter me-1"></i>Filter</button>
+        <a href="{{ url_for('faq_browse') }}" class="btn btn-outline-secondary"><i class="bi bi-x-circle"></i></a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if faqs %}
+<div class="accordion" id="faqAccordion">
+  {% set ns = namespace(current_cat='') %}
+  {% for faq in faqs %}
+    {% if faq.category != ns.current_cat %}
+      {% if ns.current_cat != '' %}</div></div></div>{% endif %}
+      {% set ns.current_cat = faq.category %}
+      <div class="card mb-3">
+        <div class="card-header py-3" style="background:#1a3c6e;color:#fff;">
+          <span class="fw-bold"><i class="bi bi-tag-fill me-2"></i>{{ faq.category or 'General' }}</span>
+        </div>
+        <div class="card-body p-0"><div class="accordion">
+    {% endif %}
+    <div class="accordion-item border-0 border-bottom">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#faq{{ faq.faq_id }}">
+          {{ faq.question }}
+        </button>
+      </h2>
+      <div id="faq{{ faq.faq_id }}" class="accordion-collapse collapse">
+        <div class="accordion-body" style="background:#f8faff; white-space:pre-line;">{{ faq.answer }}</div>
+      </div>
+    </div>
+  {% endfor %}
+  {% if faqs %}</div></div></div>{% endif %}
+</div>
+<p class="text-muted mt-2 small">{{ faqs|length }} FAQ(s) found.</p>
+{% else %}
+<div class="text-center text-muted py-5">
+  <i class="bi bi-inbox fs-1"></i>
+  <p class="mt-3">No FAQs found.</p>
+</div>
+{% endif %}
+{% endblock %}

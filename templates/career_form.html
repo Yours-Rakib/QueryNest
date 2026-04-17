@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% block title %}{{ action }} Career Path{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="page-header">
+      <h3 class="fw-bold mb-1">
+        <i class="bi bi-signpost-split-fill me-2"></i>{{ action }} Career Path
+      </h3>
+      <p class="opacity-75 mb-0">Fill in the details to {{ action|lower }} a career roadmap entry.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-body p-4">
+        <form method="post" enctype="multipart/form-data">
+
+          <!-- Logo Upload -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-image me-1"></i>Select Logo
+              <small class="text-muted fw-normal">(PNG or JPG)</small>
+            </label>
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <div id="logoPreviewWrap"
+                   style="width:72px;height:72px;border:2px dashed #dee2e6;border-radius:12px;
+                          background:#f8f9fa;display:flex;align-items:center;justify-content:center;
+                          overflow:hidden;flex-shrink:0;">
+                {% if path and path.logo %}
+                <img id="logoPreviewImg"
+                     src="{{ url_for('static', filename='uploads/' ~ path.logo) }}"
+                     style="width:100%;height:100%;object-fit:cover;" alt="logo">
+                {% else %}
+                <i id="logoPlaceholderIcon" class="bi bi-upload fs-3 text-muted"></i>
+                <img id="logoPreviewImg" src="" style="width:100%;height:100%;object-fit:cover;display:none;" alt="preview">
+                {% endif %}
+              </div>
+              <div>
+                <input type="file" name="logo" id="logoInput" class="form-control"
+                       accept=".png,.jpg,.jpeg" onchange="previewLogo(this)">
+                {% if path and path.logo %}
+                <small class="text-muted">Current: <strong>{{ path.logo }}</strong> — upload new to replace</small>
+                {% else %}
+                <small class="text-muted">Recommended: square image, min 100×100px</small>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Career Path Name -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Career Path Name</label>
+            <input type="text" name="title" class="form-control"
+                   value="{{ path.title if path else '' }}"
+                   placeholder="e.g. Backend Developer" required>
+          </div>
+
+          <!-- Sub Line -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Sub Line <small class="text-muted fw-normal">(Short description)</small></label>
+            <input type="text" name="description" class="form-control"
+                   value="{{ path.description if path else '' }}"
+                   placeholder="e.g. Build server-side logic, APIs, and databases">
+          </div>
+
+          <!-- Core Skills Multi-Select -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-code-slash me-1"></i>Core Skills
+              <small class="text-muted fw-normal">(select up to 10)</small>
+            </label>
+
+            <!-- Selected pills display -->
+            <div id="skillsPills" class="d-flex flex-wrap gap-1 mb-2 p-2 border rounded bg-light"
+                 style="min-height:42px;">
+              {% if path and path.skills %}
+                {% for sk in path.skills.split(',') %}
+                  {% if sk.strip() %}
+                  <span class="badge d-flex align-items-center gap-1 px-2 py-1"
+                        style="background:#1a3c6e;font-size:0.8rem;">
+                    {{ sk.strip() }}
+                    <span onclick="removeSkill('{{ sk.strip() }}')"
+                          style="cursor:pointer;font-size:1rem;line-height:1;">&times;</span>
+                  </span>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                <span class="text-muted small" id="skillsPlaceholder">No skills selected yet…</span>
+              {% endif %}
+            </div>
+
+            <select id="skillsDropdown" class="form-select"
+                    onchange="addSkill(this.value); this.value='';">
+              <option value="">— Select a skill to add —</option>
+              {% for sk in career_skills %}
+              <option value="{{ sk }}">{{ sk }}</option>
+              {% endfor %}
+            </select>
+            <!-- Hidden inputs built by JS -->
+            <div id="skillsHidden">
+              {% if path and path.skills %}
+                {% for sk in path.skills.split(',') %}
+                  {% if sk.strip() %}
+                  <input type="hidden" name="skills" value="{{ sk.strip() }}">
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-text">Click a skill to add; click × on a pill to remove.</div>
+          </div>
+
+          <!-- Tools & Technologies Multi-Select -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-tools me-1"></i>Tools &amp; Technologies
+              <small class="text-muted fw-normal">(select up to 10)</small>
+            </label>
+
+            <div id="toolsPills" class="d-flex flex-wrap gap-1 mb-2 p-2 border rounded bg-light"
+                 style="min-height:42px;">
+              {% if path and path.tools %}
+                {% for tl in path.tools.split(',') %}
+                  {% if tl.strip() %}
+                  <span class="badge d-flex align-items-center gap-1 px-2 py-1"
+                        style="background:#198754;font-size:0.8rem;">
+                    {{ tl.strip() }}
+                    <span onclick="removeTool('{{ tl.strip() }}')"
+                          style="cursor:pointer;font-size:1rem;line-height:1;">&times;</span>
+                  </span>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                <span class="text-muted small" id="toolsPlaceholder">No tools selected yet…</span>
+              {% endif %}
+            </div>
+
+            <select id="toolsDropdown" class="form-select"
+                    onchange="addTool(this.value); this.value='';">
+              <option value="">— Select a tool to add —</option>
+              {% for tl in career_tools %}
+              <option value="{{ tl }}">{{ tl }}</option>
+              {% endfor %}
+            </select>
+            <div id="toolsHidden">
+              {% if path and path.tools %}
+                {% for tl in path.tools.split(',') %}
+                  {% if tl.strip() %}
+                  <input type="hidden" name="tools" value="{{ tl.strip() }}">
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            </div>
+            <div class="form-text">Click a tool to add; click × on a pill to remove.</div>
+          </div>
+
+          <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-primary fw-semibold px-4">
+              <i class="bi bi-check-lg me-2"></i>{{ action }} Career Path
+            </button>
+            <a href="{{ url_for('admin_careers') }}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Logo Preview ─────────────────────────────────────── */
+function previewLogo(input) {
+  const img  = document.getElementById('logoPreviewImg');
+  const icon = document.getElementById('logoPlaceholderIcon');
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      img.src = e.target.result;
+      img.style.display = 'block';
+      if (icon) icon.style.display = 'none';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+/* ── Skills pill manager ──────────────────────────────── */
+const MAX_SELECT = 10;
+
+function getSkills() {
+  return [...document.querySelectorAll('#skillsHidden input[name="skills"]')].map(i => i.value);
+}
+function getTools() {
+  return [...document.querySelectorAll('#toolsHidden input[name="tools"]')].map(i => i.value);
+}
+
+function addSkill(val) {
+  if (!val) return;
+  const skills = getSkills();
+  if (skills.includes(val)) return;
+  if (skills.length >= MAX_SELECT) { alert('Maximum 10 skills allowed.'); return; }
+  // add hidden input
+  const inp = document.createElement('input');
+  inp.type = 'hidden'; inp.name = 'skills'; inp.value = val;
+  document.getElementById('skillsHidden').appendChild(inp);
+  // add pill
+  const ph = document.getElementById('skillsPlaceholder');
+  if (ph) ph.remove();
+  const pill = document.createElement('span');
+  pill.className = 'badge d-flex align-items-center gap-1 px-2 py-1';
+  pill.style.cssText = 'background:#1a3c6e;font-size:0.8rem;';
+  pill.dataset.val = val;
+  pill.innerHTML = `${val} <span onclick="removeSkill('${val.replace(/'/g,"\\'")}') "style="cursor:pointer;font-size:1rem;line-height:1;">&times;</span>`;
+  document.getElementById('skillsPills').appendChild(pill);
+}
+
+function removeSkill(val) {
+  // remove hidden input
+  document.querySelectorAll('#skillsHidden input[name="skills"]').forEach(i => {
+    if (i.value === val) i.remove();
+  });
+  // remove pill
+  document.querySelectorAll('#skillsPills span.badge').forEach(p => {
+    if (p.dataset.val === val) p.remove();
+  });
+  if (getSkills().length === 0) {
+    const ph = document.createElement('span');
+    ph.className = 'text-muted small'; ph.id = 'skillsPlaceholder';
+    ph.textContent = 'No skills selected yet…';
+    document.getElementById('skillsPills').appendChild(ph);
+  }
+}
+
+/* ── Tools pill manager ───────────────────────────────── */
+function addTool(val) {
+  if (!val) return;
+  const tools = getTools();
+  if (tools.includes(val)) return;
+  if (tools.length >= MAX_SELECT) { alert('Maximum 10 tools allowed.'); return; }
+  const inp = document.createElement('input');
+  inp.type = 'hidden'; inp.name = 'tools'; inp.value = val;
+  document.getElementById('toolsHidden').appendChild(inp);
+  const ph = document.getElementById('toolsPlaceholder');
+  if (ph) ph.remove();
+  const pill = document.createElement('span');
+  pill.className = 'badge d-flex align-items-center gap-1 px-2 py-1';
+  pill.style.cssText = 'background:#198754;font-size:0.8rem;';
+  pill.dataset.val = val;
+  pill.innerHTML = `${val} <span onclick="removeTool('${val.replace(/'/g,"\\'")}') "style="cursor:pointer;font-size:1rem;line-height:1;">&times;</span>`;
+  document.getElementById('toolsPills').appendChild(pill);
+}
+
+function removeTool(val) {
+  document.querySelectorAll('#toolsHidden input[name="tools"]').forEach(i => {
+    if (i.value === val) i.remove();
+  });
+  document.querySelectorAll('#toolsPills span.badge').forEach(p => {
+    if (p.dataset.val === val) p.remove();
+  });
+  if (getTools().length === 0) {
+    const ph = document.createElement('span');
+    ph.className = 'text-muted small'; ph.id = 'toolsPlaceholder';
+    ph.textContent = 'No tools selected yet…';
+    document.getElementById('toolsPills').appendChild(ph);
+  }
+}
+</script>
+{% endblock %}

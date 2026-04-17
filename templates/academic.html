@@ -1,0 +1,472 @@
+{% extends "base.html" %}
+{% block title %}Academic Info{% endblock %}
+
+{% block content %}
+<style>
+  #acadTab .nav-link {
+    color: #1a3c6e !important;
+    font-weight: 500;
+    border: 1px solid #dee2e6;
+    margin-right: 4px;
+    background: #fff;
+  }
+  #acadTab .nav-link:hover {
+    color: #f0a500 !important;
+    background: #f4f6fb;
+  }
+  #acadTab .nav-link.active {
+    color: #1a3c6e !important;
+    font-weight: 700;
+    border-bottom-color: #fff;
+    background: #fff;
+  }
+</style>
+
+<h3 class="fw-bold mb-4"><i class="bi bi-book-half me-2" style="color:var(--primary);"></i>Academic Information</h3>
+
+<!-- Nav Tabs -->
+<ul class="nav nav-tabs mb-4" id="acadTab">
+  <li class="nav-item">
+    <a class="nav-link active" data-bs-toggle="tab" href="#deptinfo">
+      <i class="bi bi-info-circle me-1"></i>Department Info
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#grade">
+      <i class="bi bi-bar-chart-fill me-1"></i>Grading Policy
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#markdist">
+      <i class="bi bi-pie-chart-fill me-1"></i>Mark Distribution
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#midterm">
+      <i class="bi bi-calendar-event me-1"></i>Midterm Routine
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#final">
+      <i class="bi bi-calendar-check me-1"></i>Final Routine
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="tab" href="#courselist">
+      <i class="bi bi-journals me-1"></i>Course List
+    </a>
+  </li>
+</ul>
+
+<div class="tab-content">
+
+  <!-- Department Info Tab -->
+  <div class="tab-pane fade show active" id="deptinfo">
+    <div class="row g-4">
+
+      <!-- Dept Office -->
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header py-3" style="background:var(--primary);color:#fff;">
+            <strong><i class="bi bi-building me-2"></i>Department Office</strong>
+          </div>
+          <div class="card-body d-flex align-items-center gap-3 py-4">
+            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                 style="width:60px;height:60px;background:#e9f0fb;">
+              <i class="bi bi-geo-alt-fill fs-3" style="color:var(--primary);"></i>
+            </div>
+            <div>
+              <h5 class="fw-bold mb-1">SWE Department Office</h5>
+              <p class="mb-0 text-muted fs-5"><i class="bi bi-door-open me-2"></i>Room No. <strong class="text-dark">607</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CR Information -->
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header py-3" style="background:var(--primary);color:#fff;">
+            <strong><i class="bi bi-people-fill me-2"></i>SWE All CRs Information — Spring 2026</strong>
+          </div>
+          <div class="card-body d-flex flex-column align-items-center justify-content-center text-center py-5">
+            <div class="fs-1 mb-3" style="color:var(--primary);"><i class="bi bi-table"></i></div>
+            <p class="text-muted mb-4">View the full list of Class Representatives (CRs) for all SWE sections in Spring 2026.</p>
+            <a href="https://docs.google.com/spreadsheets/d/1ctLNG1vnwsGUfFpVZHuRBnC_7CIEzfHBjxA3WCw4_CI/edit?usp=sharing"
+               target="_blank"
+               class="btn btn-primary btn-lg px-4">
+              <i class="bi bi-box-arrow-up-right me-2"></i>Open CR Sheet
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Faculty Information -->
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header py-3" style="background:#198754;color:#fff;">
+            <strong><i class="bi bi-person-badge-fill me-2"></i>SWE All Faculty Information — Spring 2026</strong>
+          </div>
+          <div class="card-body d-flex flex-column align-items-center justify-content-center text-center py-5">
+            <div class="fs-1 mb-3" style="color:#198754;"><i class="bi bi-table"></i></div>
+            <p class="text-muted mb-4">View the full list of faculty members and their course assignments for Spring 2026.</p>
+            <a href="https://docs.google.com/spreadsheets/d/1OIiwx2JeSWnsVN7B2oQpYS0ZVK-t0mAsZCRHNg3ZgE8/edit?usp=sharing"
+               target="_blank"
+               class="btn btn-success btn-lg px-4">
+              <i class="bi bi-box-arrow-up-right me-2"></i>Open Faculty Sheet
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Grading Policy Tab -->
+  <div class="tab-pane fade" id="grade">
+    <div class="card">
+      <div class="card-header py-3" style="background:var(--primary);color:#fff;">
+        <strong><i class="bi bi-bar-chart-fill me-2"></i>Grading Policy</strong>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Grade</th>
+              <th>Marks Range</th>
+              <th class="text-center">GPA Points</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="badge bg-success fs-6">A+</span></td><td>80 – 100</td><td class="text-center fw-bold">4.00</td><td>Outstanding</td></tr>
+            <tr><td><span class="badge bg-success fs-6">A</span></td><td>75 – 79</td><td class="text-center fw-bold">3.75</td><td>Excellent</td></tr>
+            <tr><td><span class="badge bg-success fs-6">A-</span></td><td>70 – 74</td><td class="text-center fw-bold">3.50</td><td>Very Good</td></tr>
+            <tr><td><span class="badge bg-primary fs-6">B+</span></td><td>65 – 69</td><td class="text-center fw-bold">3.25</td><td>Good</td></tr>
+            <tr><td><span class="badge bg-primary fs-6">B</span></td><td>60 – 64</td><td class="text-center fw-bold">3.00</td><td>Satisfactory</td></tr>
+            <tr><td><span class="badge bg-primary fs-6">B-</span></td><td>55 – 59</td><td class="text-center fw-bold">2.75</td><td>Above Average</td></tr>
+            <tr><td><span class="badge bg-warning text-dark fs-6">C+</span></td><td>50 – 54</td><td class="text-center fw-bold">2.50</td><td>Average</td></tr>
+            <tr><td><span class="badge bg-warning text-dark fs-6">C</span></td><td>45 – 49</td><td class="text-center fw-bold">2.25</td><td>Below Average</td></tr>
+            <tr><td><span class="badge bg-warning text-dark fs-6">D</span></td><td>40 – 44</td><td class="text-center fw-bold">2.00</td><td>Marginal Pass</td></tr>
+            <tr><td><span class="badge bg-danger fs-6">F</span></td><td>Below 40</td><td class="text-center fw-bold">0.00</td><td>Fail — Must Retake</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mark Distribution Tab -->
+  <div class="tab-pane fade" id="markdist">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header py-3" style="background:var(--primary);color:#fff;">
+            <strong><i class="bi bi-pencil-square me-2"></i>Theory Course Distribution</strong>
+          </div>
+          <div class="card-body p-0">
+            <table class="table mb-0">
+              <thead class="table-light">
+                <tr><th>Component</th><th class="text-center">Marks</th><th>Description</th></tr>
+              </thead>
+              <tbody>
+                {% for m in marks %}
+                <tr>
+                  <td class="fw-semibold">{{ m.component }}</td>
+                  <td class="text-center">
+                    <span class="badge" style="background:var(--accent);font-size:.9rem;">{{ m.marks }}</span>
+                  </td>
+                  <td><small class="text-muted">{{ m.description }}</small></td>
+                </tr>
+                {% endfor %}
+                <tr class="table-light fw-bold">
+                  <td>Total</td>
+                  <td class="text-center"><span class="badge bg-dark" style="font-size:.9rem;">100</span></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header py-3" style="background:#198754;color:#fff;">
+            <strong><i class="bi bi-cpu me-2"></i>Lab Course Distribution</strong>
+          </div>
+          <div class="card-body p-0">
+            <table class="table mb-0">
+              <thead class="table-light">
+                <tr><th>Component</th><th class="text-center">Marks</th><th>Description</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="fw-semibold">Lab Performance</td>
+                  <td class="text-center"><span class="badge bg-success">30</span></td>
+                  <td><small class="text-muted">Assessed during lab sessions</small></td>
+                </tr>
+                <tr>
+                  <td class="fw-semibold">Lab Report</td>
+                  <td class="text-center"><span class="badge bg-success">20</span></td>
+                  <td><small class="text-muted">Submitted after each lab session</small></td>
+                </tr>
+                <tr>
+                  <td class="fw-semibold">Lab Test / Viva</td>
+                  <td class="text-center"><span class="badge bg-success">50</span></td>
+                  <td><small class="text-muted">Written test and oral viva</small></td>
+                </tr>
+                <tr class="table-light fw-bold">
+                  <td>Total</td>
+                  <td class="text-center"><span class="badge bg-dark">100</span></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Midterm Routine Tab -->
+  <div class="tab-pane fade" id="midterm">
+    <div class="card">
+      <div class="card-header py-3" style="background:var(--primary);color:#fff;">
+        <strong><i class="bi bi-calendar-event me-2"></i>Midterm Exam Routine — Spring 2026</strong>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr><th>Course Code</th><th>Course Name</th><th>Date</th><th>Time</th><th>Room</th></tr>
+          </thead>
+          <tbody>
+            {% for e in midterms %}
+            <tr>
+              <td><span class="badge" style="background:var(--primary);">{{ e.course_code }}</span></td>
+              <td>{{ e.course_name }}</td>
+              <td><i class="bi bi-calendar3 me-1 text-muted"></i>{{ e.exam_date }}</td>
+              <td><i class="bi bi-clock me-1 text-muted"></i>{{ e.exam_time }}</td>
+              <td><i class="bi bi-door-open me-1 text-muted"></i>{{ e.room }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Final Routine Tab -->
+  <div class="tab-pane fade" id="final">
+    <div class="card">
+      <div class="card-header py-3" style="background:#198754;color:#fff;">
+        <strong><i class="bi bi-calendar-check me-2"></i>Final Exam Routine — Spring 2026</strong>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr><th>Course Code</th><th>Course Name</th><th>Date</th><th>Time</th><th>Room</th></tr>
+          </thead>
+          <tbody>
+            {% for e in finals %}
+            <tr>
+              <td><span class="badge bg-success">{{ e.course_code }}</span></td>
+              <td>{{ e.course_name }}</td>
+              <td><i class="bi bi-calendar3 me-1 text-muted"></i>{{ e.exam_date }}</td>
+              <td><i class="bi bi-clock me-1 text-muted"></i>{{ e.exam_time }}</td>
+              <td><i class="bi bi-door-open me-1 text-muted"></i>{{ e.room }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Course List Tab -->
+  <div class="tab-pane fade" id="courselist">
+
+    <!-- Search & Stats bar -->
+    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+      <div class="input-group" style="max-width:320px;">
+        <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+        <input type="text" id="courseSearch" class="form-control" placeholder="Search courses…" oninput="filterCourses()">
+      </div>
+      <span class="text-muted small fw-semibold">73 total courses</span>
+    </div>
+
+    <!-- CORE COURSES -->
+    <div class="course-section mb-4">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <span class="badge rounded-pill px-3 py-2 fw-semibold" style="background:#1a3c6e;font-size:.85rem;">Core Courses</span>
+        <div class="flex-grow-1 border-top"></div>
+        <span class="text-muted small fw-semibold">47 courses</span>
+      </div>
+      <div class="row g-3 course-grid">
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Computer Fundamentals</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Computer Fundamentals Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Introduction to Software Engineering</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">English I</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Bangladesh Studies</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Mathematics I</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Structured Programming</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Structured Programming Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Physics I</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Software Requirement Specification &amp; Analysis</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Discrete Mathematics</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Digital Electronics &amp; Logic Design</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Mathematics II</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Data Structure</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Data Structure Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Software Development Capstone Project</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Database System</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Database System Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Art of Living</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Computer Architecture</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Introduction to Robotics</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Statistics I</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Algorithm Design &amp; Analysis</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Algorithm Design &amp; Analysis Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Software Project Management &amp; Documentation</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Desktop &amp; Web Programming</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Desktop &amp; Web Programming Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">System Analysis &amp; Design Capstone Project</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Principles of Accounting, Business &amp; Economics</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Operating System &amp; System Programming</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Operating System &amp; System Programming Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Data Communication &amp; Computer Networking</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Data Communication &amp; Computer Networking Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Theory of Computing</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Design Pattern</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Software Quality Assurance &amp; Testing</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Software Quality Assurance &amp; Testing Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Business Analysis &amp; Communication</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Software Engineering Professional Ethics</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Software Engineering Web Application</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Software Engineering Web Application Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Software Architecture &amp; Design</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Information System Security</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Artificial Intelligence</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Artificial Intelligence Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Introduction to Machine Learning</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #1a3c6e;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Management Information System</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#1a3c6e;"></i>Core</small></div></div></div>
+      </div>
+    </div>
+
+    <!-- DS MAJOR -->
+    <div class="course-section mb-4">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <span class="badge rounded-pill px-3 py-2 fw-semibold" style="background:#0d6efd;font-size:.85rem;">DS Major</span>
+        <div class="flex-grow-1 border-top"></div>
+        <span class="text-muted small fw-semibold">8 courses</span>
+      </div>
+      <div class="row g-3 course-grid">
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #0d6efd;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Introduction To Data Science and Data Management &amp; Analysis</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#0d6efd;"></i>DS Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #0d6efd;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Introduction To Data Science and Data Management &amp; Analysis Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#0d6efd;"></i>DS Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #0d6efd;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Statistical Data Analysis</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#0d6efd;"></i>DS Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #0d6efd;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Statistical Data Analysis Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#0d6efd;"></i>DS Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #0d6efd;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Machine Learning Driven Data Analysis I</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#0d6efd;"></i>DS Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #0d6efd;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Machine Learning Driven Data Analysis I Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#0d6efd;"></i>DS Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #0d6efd;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Machine Learning Driven Data Analysis II &amp; Communicating Data Insights</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#0d6efd;"></i>DS Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #0d6efd;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Machine Learning Driven Data Analysis II &amp; Communicating Data Insights Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#0d6efd;"></i>DS Major</small></div></div></div>
+      </div>
+    </div>
+
+    <!-- RE MAJOR -->
+    <div class="course-section mb-4">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <span class="badge rounded-pill px-3 py-2 fw-semibold" style="background:#198754;font-size:.85rem;">RE Major</span>
+        <div class="flex-grow-1 border-top"></div>
+        <span class="text-muted small fw-semibold">9 courses</span>
+      </div>
+      <div class="row g-3 course-grid">
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #198754;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Embedded Programming</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#198754;"></i>RE Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #198754;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Embedded Programming Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#198754;"></i>RE Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #198754;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Embedded Systems Design &amp; Development</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#198754;"></i>RE Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #198754;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Embedded Systems Design &amp; Development Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#198754;"></i>RE Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #198754;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Advanced Robotics</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#198754;"></i>RE Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #198754;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Advanced Robotics Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#198754;"></i>RE Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #198754;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Robotics Embedded Systems Major Capstone Project</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#198754;"></i>RE Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #198754;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Robotics Automation Design &amp; Development</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#198754;"></i>RE Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #198754;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Robotics Automation Design &amp; Development Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#198754;"></i>RE Major</small></div></div></div>
+      </div>
+    </div>
+
+    <!-- CS MAJOR -->
+    <div class="course-section mb-4">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <span class="badge rounded-pill px-3 py-2 fw-semibold" style="background:#6f42c1;font-size:.85rem;">CS Major</span>
+        <div class="flex-grow-1 border-top"></div>
+        <span class="text-muted small fw-semibold">5 courses</span>
+      </div>
+      <div class="row g-3 course-grid">
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #6f42c1;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Network Communication Security</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#6f42c1;"></i>CS Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #6f42c1;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Cyber Security Fundamentals</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#6f42c1;"></i>CS Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #6f42c1;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Ethical Hacking &amp; Countermeasures</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#6f42c1;"></i>CS Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #6f42c1;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Ethical Hacking &amp; Countermeasures Lab</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#6f42c1;"></i>CS Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #6f42c1;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Digital Forensics</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#6f42c1;"></i>CS Major</small></div></div></div>
+      </div>
+    </div>
+
+    <!-- NON MAJOR -->
+    <div class="course-section mb-4">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <span class="badge rounded-pill px-3 py-2 fw-semibold" style="background:#f0a500;font-size:.85rem;">Non Major</span>
+        <div class="flex-grow-1 border-top"></div>
+        <span class="text-muted small fw-semibold">4 courses</span>
+      </div>
+      <div class="row g-3 course-grid">
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #f0a500;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Mobile Application Development</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#f0a500;"></i>Non Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #f0a500;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Data Warehouse &amp; Data Mining</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#f0a500;"></i>Non Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #f0a500;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Employability 360</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#f0a500;"></i>Non Major</small></div></div></div>
+        <div class="col-6 col-md-4 col-lg-3 course-card-col"><div class="card h-100" style="border-left:4px solid #f0a500;"><div class="card-body py-3 px-3"><p class="fw-semibold mb-1" style="font-size:.9rem;">Research Methodology</p><small class="text-muted" style="font-size:.75rem;"><i class="bi bi-tag me-1" style="color:#f0a500;"></i>Non Major</small></div></div></div>
+      </div>
+    </div>
+
+    <div id="noResults" class="text-center text-muted py-5 d-none">
+      <i class="bi bi-search fs-1 d-block mb-2"></i>No courses match your search.
+    </div>
+
+  </div><!-- end #courselist -->
+
+</div><!-- end tab-content -->
+
+<script>
+function filterCourses() {
+  const q = document.getElementById('courseSearch').value.toLowerCase().trim();
+  let anyVisible = false;
+  document.querySelectorAll('.course-card-col').forEach(col => {
+    const name = col.querySelector('.fw-semibold').textContent.toLowerCase();
+    const show = !q || name.includes(q);
+    col.style.display = show ? '' : 'none';
+    if (show) anyVisible = true;
+  });
+  document.querySelectorAll('.course-section').forEach(sec => {
+    const visible = [...sec.querySelectorAll('.course-card-col')].some(c => c.style.display !== 'none');
+    sec.style.display = visible ? '' : 'none';
+  });
+  document.getElementById('noResults').classList.toggle('d-none', anyVisible || !q);
+}
+</script>
+
+<script>
+function filterCourses() {
+  const q = document.getElementById('courseSearch').value.toLowerCase().trim();
+  let anyVisible = false;
+
+  document.querySelectorAll('.course-card-col').forEach(col => {
+    const name = col.querySelector('.fw-semibold').textContent.toLowerCase();
+    const show = !q || name.includes(q);
+    col.style.display = show ? '' : 'none';
+    if (show) anyVisible = true;
+  });
+
+  // Hide sections where all cards are hidden
+  document.querySelectorAll('.course-section').forEach(sec => {
+    const visible = [...sec.querySelectorAll('.course-card-col')].some(c => c.style.display !== 'none');
+    sec.style.display = visible ? '' : 'none';
+  });
+
+  document.getElementById('noResults').classList.toggle('d-none', anyVisible || !q);
+}
+</script>
+{% endblock %}

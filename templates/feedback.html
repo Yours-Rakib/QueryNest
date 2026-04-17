@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Feedback{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="page-header">
+      <h3 class="fw-bold mb-1"><i class="bi bi-chat-left-text-fill me-2"></i>Student Feedback & Suggestions</h3>
+      <p class="mb-0 opacity-75">Submit free-text suggestions or report missing topics</p>
+    </div>
+
+    <div class="card">
+      <div class="card-body p-4">
+        <form method="post">
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Your Feedback / Suggestion</label>
+            <textarea name="content" class="form-control" rows="6"
+                      placeholder="Describe a missing FAQ topic, report an issue, or suggest improvements…"
+                      required></textarea>
+            <div class="form-text">All feedback is reviewed by the admin team.</div>
+          </div>
+          <button type="submit" class="btn btn-primary px-5">
+            <i class="bi bi-send-fill me-2"></i>Submit Feedback
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mt-4">
+      <div class="card-header py-3" style="background:#1a3c6e;color:#fff;">
+        <span class="fw-bold"><i class="bi bi-lightbulb-fill me-2"></i>What can you submit?</span>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4 text-center">
+            <div class="fs-2 mb-2" style="color:#1a3c6e;"><i class="bi bi-question-circle"></i></div>
+            <div class="fw-semibold small">Missing FAQ Topic</div>
+            <div class="text-muted" style="font-size:.8rem;">Tell us what the chatbot couldn't answer</div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div class="fs-2 mb-2" style="color:#f0a500;"><i class="bi bi-bug"></i></div>
+            <div class="fw-semibold small">Report an Issue</div>
+            <div class="text-muted" style="font-size:.8rem;">Found something broken? Let us know</div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div class="fs-2 mb-2" style="color:#198754;"><i class="bi bi-stars"></i></div>
+            <div class="fw-semibold small">Suggest Improvement</div>
+            <div class="text-muted" style="font-size:.8rem;">Ideas to make QueryNest better</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

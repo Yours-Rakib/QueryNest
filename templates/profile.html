@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+    <div class="page-header">
+      <h3 class="fw-bold mb-1"><i class="bi bi-person-circle me-2"></i>My Profile</h3>
+      <p class="mb-0 opacity-75">View and update your account information</p>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- ── Account Details ─────────────────────── -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header py-3" style="background:#1a3c6e;color:#fff;">
+            <span class="fw-bold"><i class="bi bi-person-fill me-2"></i>Account Details</span>
+          </div>
+          <div class="card-body p-4">
+            <form method="post" enctype="multipart/form-data">
+              <input type="hidden" name="action" value="update_profile">
+
+              <!-- Avatar display + upload -->
+              <div class="text-center mb-4">
+                <div class="position-relative d-inline-block">
+                  {% if user.avatar %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ user.avatar) }}"
+                         id="avatarPreview"
+                         class="rounded-circle object-fit-cover"
+                         style="width:90px;height:90px;border:3px solid #1a3c6e;object-fit:cover;">
+                  {% else %}
+                    <div id="avatarPreview"
+                         class="rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                         style="width:90px;height:90px;background:#e9f0fb;font-size:2.2rem;color:#1a3c6e;border:3px solid #1a3c6e;">
+                      <i class="bi bi-person-fill"></i>
+                    </div>
+                  {% endif %}
+                  <!-- Camera overlay button -->
+                  <label for="avatarInput"
+                         class="position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center"
+                         style="width:28px;height:28px;background:#f0a500;color:#fff;cursor:pointer;border:2px solid #fff;"
+                         title="Change photo">
+                    <i class="bi bi-camera-fill" style="font-size:.75rem;"></i>
+                  </label>
+                  <input type="file" id="avatarInput" name="avatar" accept="image/*"
+                         class="d-none" onchange="previewAvatar(event)">
+                </div>
+                <h5 class="fw-bold mb-0 mt-2">{{ user.name }}</h5>
+                <span class="badge mt-1" style="background:{% if user.role=='admin' %}#f0a500{% else %}#1a3c6e{% endif %};">
+                  {{ user.role|capitalize }}
+                </span>
+                <div class="text-muted small mt-1">Click the <i class="bi bi-camera-fill text-warning"></i> icon to change photo</div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Username</label>
+                <input type="text" class="form-control bg-light" value="{{ user.name }}" disabled>
+                <div class="form-text">Username cannot be changed.</div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Display Name</label>
+                <input type="text" name="display_name" class="form-control"
+                       value="{{ user.display_name or user.name }}" placeholder="Your display name">
+              </div>
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Email Address</label>
+                <input type="email" name="email" class="form-control"
+                       value="{{ user.email or '' }}" placeholder="your@email.com">
+              </div>
+              <button type="submit" class="btn btn-primary w-100 py-2">
+                <i class="bi bi-save me-2"></i>Save Changes
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Change Password ─────────────────────── -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header py-3" style="background:#1a3c6e;color:#fff;">
+            <span class="fw-bold"><i class="bi bi-lock-fill me-2"></i>Change Password</span>
+          </div>
+          <div class="card-body p-4">
+            <form method="post">
+              <input type="hidden" name="action" value="change_password">
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Current Password</label>
+                <input type="password" name="current_password" class="form-control"
+                       placeholder="Enter current password" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold">New Password</label>
+                <input type="password" name="new_password" class="form-control"
+                       placeholder="At least 6 characters" required>
+              </div>
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Confirm New Password</label>
+                <input type="password" name="confirm_password" class="form-control"
+                       placeholder="Repeat new password" required>
+              </div>
+              <button type="submit" class="btn btn-outline-danger w-100 py-2">
+                <i class="bi bi-key me-2"></i>Change Password
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function previewAvatar(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const preview = document.getElementById('avatarPreview');
+    // Replace div with img if it was the placeholder div
+    if (preview.tagName === 'DIV') {
+      const img = document.createElement('img');
+      img.id = 'avatarPreview';
+      img.className = 'rounded-circle object-fit-cover';
+      img.style = 'width:90px;height:90px;border:3px solid #1a3c6e;object-fit:cover;';
+      img.src = e.target.result;
+      preview.replaceWith(img);
+    } else {
+      preview.src = e.target.result;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+</script>
+{% endblock %}

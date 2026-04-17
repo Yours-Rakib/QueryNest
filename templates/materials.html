@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Study Materials{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h3 class="fw-bold mb-1"><i class="bi bi-download me-2"></i>Study Material Download Center</h3>
+  <p class="mb-0 opacity-75">Admin-uploaded notes, guides, and templates — free to download</p>
+</div>
+
+<!-- Category Filter -->
+<div class="card mb-4">
+  <div class="card-body d-flex flex-wrap gap-2 align-items-center">
+    <span class="fw-semibold me-2"><i class="bi bi-filter me-1"></i>Filter by category:</span>
+    <a href="{{ url_for('materials') }}" class="btn btn-sm {% if not current_category %}btn-primary{% else %}btn-outline-secondary{% endif %}">All</a>
+    {% for c in categories %}
+    <a href="{{ url_for('materials', category=c.category) }}"
+       class="btn btn-sm {% if c.category == current_category %}btn-primary{% else %}btn-outline-secondary{% endif %}">{{ c.category }}</a>
+    {% endfor %}
+  </div>
+</div>
+
+{% if materials %}
+<div class="row g-3">
+  {% for m in materials %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="d-flex align-items-start gap-3">
+          <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+               style="width:46px;height:46px;background:#e9f0fb;color:#1a3c6e;">
+            {% set ext = m.filename.rsplit('.',1)[-1].lower() %}
+            {% if ext == 'pdf' %}<i class="bi bi-file-earmark-pdf fs-4 text-danger"></i>
+            {% elif ext in ['doc','docx'] %}<i class="bi bi-file-earmark-word fs-4 text-primary"></i>
+            {% elif ext in ['ppt','pptx'] %}<i class="bi bi-file-earmark-ppt fs-4" style="color:#c55a11;"></i>
+            {% elif ext in ['xls','xlsx'] %}<i class="bi bi-file-earmark-excel fs-4 text-success"></i>
+            {% else %}<i class="bi bi-file-earmark fs-4"></i>{% endif %}
+          </div>
+          <div class="flex-grow-1">
+            <h6 class="fw-bold mb-1">{{ m.title }}</h6>
+            {% if m.description %}<p class="text-muted small mb-2">{{ m.description }}</p>{% endif %}
+            <div class="d-flex gap-2 flex-wrap">
+              <span class="badge" style="background:#1a3c6e;">{{ m.category }}</span>
+              <span class="badge bg-light text-dark border small">{{ m.filename.rsplit('.',1)[-1].upper() }}</span>
+            </div>
+            <div class="small text-muted mt-1"><i class="bi bi-calendar3 me-1"></i>{{ m.uploaded_at[:10] }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer bg-transparent">
+        <a href="{{ url_for('material_download', material_id=m.material_id) }}"
+           class="btn btn-sm btn-primary w-100">
+          <i class="bi bi-download me-1"></i>Download
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="text-center text-muted py-5">
+  <i class="bi bi-folder-x fs-1"></i>
+  <p class="mt-3">No materials available yet. Check back later!</p>
+</div>
+{% endif %}
+{% endblock %}

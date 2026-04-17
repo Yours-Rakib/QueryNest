@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}{{ action }} Club{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="page-header">
+      <h3 class="fw-bold mb-1"><i class="bi bi-people-fill me-2"></i>{{ action }} Student Club</h3>
+    </div>
+    <div class="card">
+      <div class="card-body p-4">
+        <form method="post" enctype="multipart/form-data">
+
+          <!-- Logo Upload -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold"><i class="bi bi-image me-1"></i>Select Club Logo <small class="text-muted fw-normal">(PNG or JPG)</small></label>
+            <div class="d-flex align-items-center gap-3">
+              <div style="width:72px;height:72px;border:2px dashed #dee2e6;border-radius:12px;
+                          background:#f8f9fa;display:flex;align-items:center;justify-content:center;
+                          overflow:hidden;flex-shrink:0;">
+                {% if club and club.logo %}
+                <img id="logoImg" src="{{ url_for('static', filename='uploads/' ~ club.logo) }}"
+                     style="width:100%;height:100%;object-fit:cover;">
+                {% else %}
+                <i id="logoIcon" class="bi bi-upload fs-3 text-muted"></i>
+                <img id="logoImg" src="" style="width:100%;height:100%;object-fit:cover;display:none;">
+                {% endif %}
+              </div>
+              <div class="flex-grow-1">
+                <input type="file" name="logo" class="form-control" accept=".png,.jpg,.jpeg"
+                       onchange="previewImg(this,'logoImg','logoIcon')">
+                {% if club and club.logo %}<small class="text-muted">Upload new to replace current logo</small>{% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Club Motto -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Club Motto</label>
+            <input type="text" name="motto" class="form-control"
+                   value="{{ club.motto if club else '' }}"
+                   placeholder="e.g. Code. Create. Conquer.">
+          </div>
+
+          <!-- Club Name -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Club Name</label>
+            <input type="text" name="name" class="form-control"
+                   value="{{ club.name if club else '' }}"
+                   placeholder="e.g. DIU Computer & Programming Club" required>
+          </div>
+
+          <!-- Club Type -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Club Type</label>
+            <select name="category" class="form-select" required>
+              <option value="" disabled {% if not club %}selected{% endif %}>— Choose category —</option>
+              {% for cat in club_categories %}
+              <option value="{{ cat }}" {% if club and club.category == cat %}selected{% endif %}>{{ cat }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Club Page Link -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Club Page Link <small class="text-muted fw-normal">(optional)</small></label>
+            <input type="url" name="link" class="form-control"
+                   value="{{ club.link if club else '' }}"
+                   placeholder="https://fb.com/diucpc">
+          </div>
+
+          <!-- Club Email -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Club Email <small class="text-muted fw-normal">(optional)</small></label>
+            <input type="email" name="contact" class="form-control"
+                   value="{{ club.contact if club else '' }}"
+                   placeholder="club@diu.edu.bd">
+          </div>
+
+          <!-- Description -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Description <small class="text-muted fw-normal">(optional)</small></label>
+            <textarea name="description" class="form-control" rows="3"
+                      placeholder="Brief description of the club…">{{ club.description if club else '' }}</textarea>
+          </div>
+
+          <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-primary fw-semibold px-4">
+              <i class="bi bi-check-lg me-2"></i>{{ action }} Club
+            </button>
+            <a href="{{ url_for('admin_campus') }}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function previewImg(input, imgId, iconId) {
+  if (input.files && input.files[0]) {
+    const r = new FileReader();
+    r.onload = e => {
+      const img = document.getElementById(imgId);
+      img.src = e.target.result; img.style.display = 'block';
+      const icon = document.getElementById(iconId);
+      if (icon) icon.style.display = 'none';
+    };
+    r.readAsDataURL(input.files[0]);
+  }
+}
+</script>
+{% endblock %}

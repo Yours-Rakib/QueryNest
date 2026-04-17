@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<div class="row justify-content-center mt-4">
+  <div class="col-md-5 col-lg-4">
+    <div class="text-center mb-4">
+      <div class="fs-1 mb-2" style="color:#1a3c6e;"><i class="bi bi-person-plus-fill"></i></div>
+      <h2 class="fw-bold">Create Account</h2>
+      <p class="text-muted">Join QueryNest as a student</p>
+    </div>
+    <div class="card">
+      <div class="card-body p-4">
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Username</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input type="text" name="name" class="form-control" placeholder="At least 3 characters" required autofocus>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email <small class="text-muted fw-normal">(optional)</small></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input type="email" name="email" class="form-control" placeholder="your@email.com">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Password</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input type="password" name="password" class="form-control" placeholder="At least 6 characters" required>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Confirm Password</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+              <input type="password" name="confirm_password" class="form-control" placeholder="Repeat password" required>
+            </div>
+          </div>
+          <button type="submit" class="btn fw-semibold w-100 py-2" style="background:#f0a500;color:#fff;border:none;">
+            <i class="bi bi-person-check me-2"></i>Register
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="text-center mt-3">
+      <span class="text-muted">Already have an account?</span>
+      <a href="{{ url_for('login') }}" class="fw-semibold ms-1">Login here</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

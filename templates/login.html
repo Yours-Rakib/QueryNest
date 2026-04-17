@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="row justify-content-center mt-4">
+  <div class="col-md-5 col-lg-4">
+    <div class="text-center mb-4">
+      <div class="fs-1 mb-2" style="color:#1a3c6e;"><i class="bi bi-chat-dots-fill"></i></div>
+      <h2 class="fw-bold">Welcome Back</h2>
+      <p class="text-muted">Log in to access QueryNest</p>
+    </div>
+    <div class="card">
+      <div class="card-body p-4">
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Username</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input type="text" name="name" class="form-control" placeholder="Your username" required autofocus>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Password</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input type="password" name="password" class="form-control" placeholder="Your password" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="text-center mt-3">
+      <span class="text-muted">Don't have an account?</span>
+      <a href="{{ url_for('register') }}" class="fw-semibold ms-1">Register here</a>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
